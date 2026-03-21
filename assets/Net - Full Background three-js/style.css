@@ -1,0 +1,24 @@
+/* General body styling */
+body {
+    margin: 0;
+    overflow: hidden; /* Prevents scrollbars from appearing */
+    background-color: #0a0a1a; /* Dark blue background */
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Ensure the canvas takes up the full screen */
+canvas {
+    display: block;
+}
+
+/* Styling for the information box in the top-left corner */
+#info {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2); /* Semi-transparent background */
+    border-radius: 8px;
+    font-size: 14px;
+}
