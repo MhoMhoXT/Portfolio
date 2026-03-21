@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAS — Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Doto:wght@100;300;400;500&family=Inter:wght@400;500;600;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+</head>
+
+<body>
+
+  <!-- 3D Room -->
+  <div class="room" id="room">
+    <div class="room-wall"></div>
+  </div>
+
+  <!-- Scene -->
+  <div class="scene" id="scene">
+
+    <!-- Room prompt text -->
+    <div class="room-prompt" id="roomPrompt">
+      <div class="room-prompt-text">Go on, pick it up.</div>
+      <div class="room-prompt-sub">everything you need is inside</div>
+    </div>
+
+    <!-- Ambient glow -->
+    <div class="tablet-glow" id="tabletGlow"></div>
+
+    <!-- Tablet -->
+    <div class="tablet idle" id="tablet" role="button" tabindex="0" aria-label="Open Portfolio">
+
+      <div class="pulse-ring"></div>
+
+      <!-- Physical buttons -->
+      <div class="tablet-power-btn"></div>
+      <div class="tablet-vol-group"><span></span><span></span></div>
+
+      <!-- Camera -->
+      <div class="tablet-camera"></div>
+
+      <!-- Screen -->
+      <div class="tablet-screen" id="tabletScreen">
+
+        <!-- Wake (black) -->
+        <div class="screen-layer" id="screenWake"></div>
+
+        <!-- Lock screen -->
+        <div class="screen-layer hidden" id="screenLock">
+          <div class="lock-time" id="lockTime">09:41</div>
+          <div class="lock-date" id="lockDate">Wednesday, 19 March</div>
+          <div class="lock-drag-overlay" id="lockDragOverlay"></div>
+          <div class="lock-swipe-hint">
+            <div class="lock-swipe-arrow"></div>
+            <div class="lock-swipe-text">Swipe up to unlock</div>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="screen-layer hidden" id="screenLoading">
+          <div class="loader-ring"></div>
+          <div class="loader-brand">Loading...</div>
+        </div>
+
+        <!-- Home screen -->
+        <div class="screen-layer hidden" id="screenHome">
+          <canvas class="particle-bg" id="particleBg"></canvas>
+          <div class="status-bar">
+            <span class="status-time" id="statusTime">9:41</span>
+            <div class="status-icons">
+              <div class="signal-bars">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+              <svg class="wifi-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                <circle cx="12" cy="20" r="1" fill="currentColor" />
+              </svg>
+              <div class="battery-wrap">
+                <div class="battery-body">
+                  <div class="battery-fill"></div>
+                </div>
+                <div class="battery-tip"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search trigger -->
+          <div class="search-bar-trigger" id="searchTrigger">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <span>Search</span>
+          </div>
+
+          <!-- Swipeable pages -->
+          <div class="pages-container" id="pagesContainer">
+            <div class="pages-track" id="pagesTrack">
+
+              <!-- Page 1 -->
+              <div class="page" data-page="0">
+                <div class="app-icon" data-app="work">
+                  <div class="app-face" style="background:linear-gradient(145deg,#2d6a4f,#1b4332)">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="2" y="7" width="20" height="14" rx="2" />
+                      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Experience</span>
+                  <div class="notif">3</div>
+                </div>
+
+                <div class="app-icon" data-app="about">
+                  <div class="app-face" style="background:linear-gradient(145deg,#1d4e89,#0d2137)">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                  </div>
+                  <span class="app-name">About Me</span>
+                </div>
+
+                <div class="app-icon" data-app="skills">
+                  <div class="app-face filled" style="background:linear-gradient(145deg,#6a0dad,#380073)">
+                    <svg viewBox="0 0 24 24">
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Skills</span>
+                </div>
+
+                <div class="app-icon" data-app="contact">
+                  <div class="app-face" style="background:linear-gradient(145deg,#c0392b,#7b0d0d)">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Contacts</span>
+                  <div class="notif">2</div>
+                </div>
+
+                <div class="app-icon" data-app="resume">
+                  <div class="app-face" style="background:linear-gradient(145deg,#0b6e99,#053a52)">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                      <line x1="16" y1="13" x2="8" y2="13" />
+                      <line x1="16" y1="17" x2="8" y2="17" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Resume</span>
+                </div>
+
+                <div class="app-icon" data-app="lab">
+                  <div class="app-face" style="background:linear-gradient(145deg,#b5451b,#6b2510)">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M9 3h6v8l4 9H5l4-9V3z" />
+                      <line x1="6" y1="15" x2="18" y2="15" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Personal Projects</span>
+                </div>
+              </div>
+
+              <!-- Page 2 -->
+              <div class="page" data-page="1">
+                <div class="app-icon app-disabled" data-app="gallery">
+                  <div class="app-face" style="background:linear-gradient(145deg,#8e4ec6,#5b2d8e)">
+                    <svg viewBox="0 0 24 24">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                      <circle cx="8.5" cy="8.5" r="1.5" />
+                      <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Gallery</span>
+                </div>
+
+                <div class="app-icon app-disabled" data-app="blog">
+                  <div class="app-face" style="background:linear-gradient(145deg,#c77a30,#8a5020)">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Blog</span>
+                </div>
+
+                <div class="app-icon" data-app="settings">
+                  <div class="app-face" style="background:linear-gradient(145deg,#2a7c6f,#1a5048)">
+                    <svg viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="3" />
+                      <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                  </div>
+                  <span class="app-name">Settings</span>
+                </div>
+
+                <div class="app-icon social-link" data-link="https://www.linkedin.com/in/muhammadaminushehu/">
+                  <div class="app-face">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+                      <rect x="2" y="9" width="4" height="12" />
+                      <circle cx="4" cy="4" r="2" />
+                    </svg>
+                  </div>
+                  <span class="app-name">LinkedIn</span>
+                </div>
+
+                <div class="app-icon social-link" data-link="https://github.com/MhoMhoXT">
+                  <div class="app-face">
+                    <svg viewBox="0 0 24 24">
+                      <path
+                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                    </svg>
+                  </div>
+                  <span class="app-name">GitHub</span>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Page dots -->
+          <div class="page-dots" id="pageDots">
+            <div class="page-dot active" data-dot="0"></div>
+            <div class="page-dot" data-dot="1"></div>
+          </div>
+
+          <!-- Dock -->
+          <div class="dock">
+            <div class="app-icon" data-app="work">
+              <div class="app-face" style="background:linear-gradient(145deg,#2d6a4f,#1b4332)">
+                <svg viewBox="0 0 24 24">
+                  <rect x="2" y="7" width="20" height="14" rx="2" />
+                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                </svg>
+              </div>
+              <span class="app-name">Experience</span>
+            </div>
+            <div class="app-icon" data-app="contact">
+              <div class="app-face" style="background:linear-gradient(145deg,#c0392b,#7b0d0d)">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+              </div>
+              <span class="app-name">Contacts</span>
+            </div>
+            <div class="app-icon" data-app="resume">
+              <div class="app-face" style="background:linear-gradient(145deg,#0b6e99,#053a52)">
+                <svg viewBox="0 0 24 24">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                </svg>
+              </div>
+              <span class="app-name">Resume</span>
+            </div>
+            <div class="app-icon" data-app="about">
+              <div class="app-face" style="background:linear-gradient(145deg,#1d4e89,#0d2137)">
+                <svg viewBox="0 0 24 24">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+              <span class="app-name">About Me</span>
+            </div>
+          </div>
+
+          <!-- Notification banner -->
+          <div class="notif-banner" id="notifBanner" data-step="0">
+            <div class="notif-banner-icon" id="notifIcon" style="background:linear-gradient(145deg,#8b5cf6,#7c3aed)">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <div>
+              <div class="notif-banner-app" id="notifApp">Welcome</div>
+              <div class="notif-banner-text" id="notifText">Hey! Tap any app to explore my portfolio</div>
+            </div>
+            <div class="notif-banner-time" id="notifTime">now</div>
+          </div>
+
+          <!-- Search overlay -->
+          <div class="search-overlay" id="searchOverlay">
+            <div class="search-header">
+              <input type="text" class="search-input" id="searchInput"
+                placeholder="Search projects, skills, contacts..." autocomplete="off">
+              <button class="search-cancel" id="searchCancel">Cancel</button>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+          </div>
+
+          <!-- Control Centre handle (top-right of status bar) -->
+          <div class="cc-handle" id="ccHandle"></div>
+
+          <!-- Control Centre overlay (dims background) -->
+          <div class="cc-overlay" id="ccOverlay"></div>
+
+          <!-- Control Centre panel -->
+          <div class="cc-panel" id="ccPanel">
+
+            <!-- Toggle tiles -->
+            <div class="cc-grid">
+              <div class="cc-tile active" id="ccWifi">
+                <div class="cc-tile-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+                    <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+                    <circle cx="12" cy="20" r="1" fill="currentColor" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="cc-tile-label">Wi-Fi</div>
+                  <div class="cc-tile-status">Connected</div>
+                </div>
+              </div>
+
+              <div class="cc-tile active" id="ccBluetooth">
+                <div class="cc-tile-icon">
+                  <svg viewBox="0 0 24 24">
+                    <polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="cc-tile-label">Bluetooth</div>
+                  <div class="cc-tile-status">On</div>
+                </div>
+              </div>
+
+              <div class="cc-tile" id="ccDnd">
+                <div class="cc-tile-icon">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="cc-tile-label">Focus</div>
+                  <div class="cc-tile-status">Off</div>
+                </div>
+              </div>
+
+              <div class="cc-tile" id="ccDarkMode">
+                <div class="cc-tile-icon">
+                  <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="cc-tile-label">Light Mode</div>
+                  <div class="cc-tile-status">Off</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Brightness -->
+            <div class="cc-slider-row">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+              <input type="range" class="cc-slider" id="ccBrightness" min="30" max="100" value="80">
+            </div>
+
+            <!-- Volume -->
+            <div class="cc-slider-row">
+              <svg viewBox="0 0 24 24">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+              <input type="range" class="cc-slider" id="ccVolume" min="0" max="100" value="65">
+            </div>
+
+            <div class="cc-divider"></div>
+
+            <!-- Quick links -->
+            <div class="cc-links">
+              <div class="cc-link" data-app="contact">
+                <div class="cc-link-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                </div>
+                <span class="cc-link-label">Email</span>
+              </div>
+              <div class="cc-link" data-app="resume">
+                <div class="cc-link-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                </div>
+                <span class="cc-link-label">Resume</span>
+              </div>
+              <div class="cc-link" data-app="work">
+                <div class="cc-link-icon">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                  </svg>
+                </div>
+                <span class="cc-link-label">Experience</span>
+              </div>
+              <div class="cc-link" data-app="about">
+                <div class="cc-link-icon">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <span class="cc-link-label">About</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end screenHome -->
+
+        <!-- =====================================================
+             APP PANELS
+        ===================================================== -->
+
+        <!-- Experience -->
+        <div class="app-panel" id="panel-work">
+          <div class="panel-nav">
+            <button class="panel-back-btn">&#8592;</button>
+            <span class="panel-title">Experience</span>
+          </div>
+          <div class="panel-body">
+            <p class="panel-h1">My Work Experience</p>
+            <div class="project-card" style="cursor:pointer"
+              onclick="window.open('https://www.zaminsuites.com/','_blank','noopener')">
+              <div class="project-card-meta">Web Development (remote) · 2024 - Present</div>
+              <div class="project-card-title">Zamin Suites</div>
+              <div class="project-card-desc">
+                <ul>
+                  <li>Built and deployed a functional website for a hotel in Nigeria, serving real users.</li>
+                  <li>Implemented interactive features and animations using JavaScript.</li>
+                  <li>Designed user-friendly layouts with basic UI/UX principles.</li>
+                  <li>Collaborated with stakeholders to gather requirements and iterate on features.</li>
+                  <li>Maintained and updated the site based on feedback</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- About -->
+        <div class="app-panel" id="panel-about">
+          <div class="panel-nav">
+            <button class="panel-back-btn">&#8592;</button>
+            <span class="panel-title">About</span>
+          </div>
+          <div class="panel-body">
+            <p class="panel-h1">Muhammad Aminu Shehu</p>
+            <p class="panel-h2">Aspiring Software Engineering Student</p>
+            <p class="panel-p">Wassup?</p>
+            <p class="panel-p">Currently based in Edinburgh. </p>
+            <div class="panel-divider"></div>
+            <p class="panel-label">Background</p>
+            <p class="panel-p">Software Engineering student with experience building functional web applications using
+              HTML, CSS, JavaScript, and SQL. Interested in backend and full-stack development, with a focus on building
+              practical systems for real users. interest in AI & Automation as well as entrepreneurship </p>
+            <div class="panel-divider"></div>
+            <p class="panel-label">Hobbies</p>
+            <p class="panel-p">Photography. Team Sports. Athletics. Gaming. Aviation. Astronomy. Attempting to learn
+              Arabic.</p>
+          </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="app-panel" id="panel-skills">
+          <div class="panel-nav">
+            <button class="panel-back-btn">&#8592;</button>
+            <span class="panel-title">Skills</span>
+          </div>
+          <div class="panel-body">
+            <p class="panel-h1">Expertise</p>
+            <p class="panel-p">Where design thinking meets technical execution.</p>
+            <p class="panel-label">Design</p>
+            <div class="skill-grid">
+              <span class="skill-pill gold">HTML</span><span class="skill-pill gold">CSS</span><span
+                class="skill-pill">JavaScript</span><span class="skill-pill">Java</span><span
+                class="skill-pill">Python</span>
+            </div>
+            <p class="panel-label">Engineering</p>
+            <div class="skill-grid">
+              <span class="skill-pill gold">React</span><span class="skill-pill">Node.js</span><span
+                class="skill-pill">API Integrations</span><span class="skill-pill">Automation</span>
+            </div>
+            <p class="panel-label">Tools</p>
+            <div class="skill-grid">
+              <span class="skill-pill">Microsoft Office</span><span class="skill-pill">Vercel (basic)</span><span
+                class="skill-pill">Netlify (basic)</span><span class="skill-pill">AI Tools</span><span
+                class="skill-pill">Github</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="app-panel" id="panel-contact">
+          <div class="panel-nav">
+            <button class="panel-back-btn">&#8592;</button>
+            <span class="panel-title">Contact</span>
+          </div>
+          <div class="panel-body">
+            <p class="panel-h1">Get in Touch</p>
+            <p class="panel-p">Open to new opportunities, collaborations, and interesting conversations.</p>
+
+            <form class="contact-form" action="https://formspree.io/f/xnjgynly" method="POST">
+              <div class="contact-form-field">
+                <label class="contact-form-label" for="contactName">Name</label>
+                <input class="contact-form-input" type="text" id="contactName" name="name" placeholder="Your name"
+                  required>
+              </div>
+              <div class="contact-form-field">
+                <label class="contact-form-label" for="contactEmail">Email</label>
+                <input class="contact-form-input" type="email" id="contactEmail" name="email"
+                  placeholder="you@example.com" required>
+              </div>
+              <div class="contact-form-field">
+                <label class="contact-form-label" for="contactMessage">Message</label>
+                <textarea class="contact-form-input contact-form-textarea" id="contactMessage" name="message"
+                  placeholder="Need my full CV/Resume? Just say so." rows="4" required></textarea>
+              </div>
+              <button class="contact-form-btn" type="submit">Send Message</button>
+              <p class="contact-form-status" id="contactFormStatus"></p>
+            </form>
+
+            <p class="panel-label" style="margin-top:20px;">Socials</p>
+            <div class="contact-item" onclick="window.open('https://www.linkedin.com/in/muhammadaminushehu/','_blank')"
+              style="cursor:pointer">
+              <div class="contact-icon" style="background:rgba(29,78,137,0.2)"><svg viewBox="0 0 24 24"
+                  stroke="#5b9bd5">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+                  <rect x="2" y="9" width="4" height="12" />
+                  <circle cx="4" cy="4" r="2" />
+                </svg></div>
+              <div>
+                <div class="contact-label">LinkedIn</div>
+                <div class="contact-value">Muhammad Aminu Shehu</div>
+              </div>
+            </div>
+            <div class="contact-item" onclick="window.open('https://github.com/MhoMhoXT','_blank')"
+              style="cursor:pointer">
+              <div class="contact-icon" style="background:rgba(50,50,50,0.25)"><svg viewBox="0 0 24 24" stroke="#999">
+                  <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                </svg></div>
+              <div>
+                <div class="contact-label">GitHub</div>
+                <div class="contact-value">MhoMhoXT</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resume -->
+        <div class="app-panel" id="panel-resume">
+          <div class="panel-nav">
+            <button class="panel-back-btn">&#8592;</button>
+            <span class="panel-title">Resume</span>
+          </div>
+          <div class="panel-body">
+            <p class="panel-h1">Experience</p>
+            <div class="panel-divider"></div>
+            <div class="timeline-item">
+              <div class="timeline-role">Web Developer (Remote)</div>
+              <div class="timeline-company">Zamin Suites</div>
+              <div class="timeline-period">2024 — Present</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-role">Collegue</div>
+              <div class="timeline-company">Tesco — Edinburgh</div>
+              <div class="timeline-period">2024 — Present</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-role">Customer Assistant</div>
+              <div class="timeline-company">M&S — Aberdeen</div>
+              <div class="timeline-period">Jul 2024 — Sept 2024</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-role">Food & Beverage Assistant</div>
+              <div class="timeline-company">Norwood Hall Hotel — London</div>
+              <div class="timeline-period"> Sept 2023 — Jun 2024</div>
+            </div>
+            <div class="panel-divider"></div>
+            <p class="panel-label">Education</p>
+            <div class="timeline-item">
+              <div class="timeline-role">MEng Software Engineering</div>
+              <div class="timeline-company">Heriot-Watt University</div>
+              <div class="timeline-period">Expected — 2029</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lab -->
+        <div class="app-panel" id="panel-lab">
+          <div class="panel-nav">
+            <button class="panel-back-btn">&#8592;</button>
+            <span class="panel-title">Lab</span>
+          </div>
+          <div class="panel-body">
+            <p class="panel-h1">Experiments</p>
+            <p class="panel-p">Side projects and prototypes built for the joy of making or not...</p>
+            <div class="lab-card"><span class="lab-tag" style="background:rgba(139,92,246,0.1);color:#8b5cf6;">AI · API
+                · Claude Code</span>
+              <div class="project-card-title" style="margin-bottom:5px;">AI Lead-Gen Automation</div>
+              <div class="project-card-desc">An AI lead gen automation I made for myself to get myself clients
+                information for my agency side hustle.</div>
+            </div>
+            <div class="lab-card"><span class="lab-tag" style="background:rgba(45,106,79,0.15);color:#52b788;">AI ·
+                Claude Code</span>
+              <div class="project-card-title" style="margin-bottom:5px;">AI Newsletter Automation</div>
+              <div class="project-card-desc">A simple AI based newletter generated by AI, can be about any topic, sent
+                to anyone at set intervals or when one pleases. Used Claude API as well as other API's such as serper
+                for research.</div>
+            </div>
+            <div class="lab-card"><span class="lab-tag" style="background:rgba(29,78,137,0.15);color:#5b9bd5;">API ·
+                Python</span>
+              <div class="project-card-title" style="margin-bottom:5px;">Simple weather app</div>
+              <div class="project-card-desc">A weather script with no fancy UI just using a weather api call, nothing
+                much.</div>
+            </div>
+            <div class="lab-card"><span class="lab-tag" style="background:rgba(29,78,137,0.15);color:#d55bd5;">AI ·
+                Python</span>
+              <div class="project-card-title" style="margin-bottom:5px;">AI Web Scraper</div>
+              <div class="project-card-desc">A simple webscraper that gets the information you ask the AI for in a
+                prompt. ficuses on token efficiency and speed.</div>
+            </div>
+            <div class="lab-card"><span class="lab-tag" style="background:rgba(29,78,137,0.15);color:#d55b5b;">HTML ·
+                PHP · SQL · CSS </span>
+              <div class="project-card-title" style="margin-bottom:5px;">Real-Time Chat Application</div>
+              <div class="project-card-desc">Was done a while ago for my A-levels equivelent project.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="app-panel" id="panel-settings">
+          <div class="panel-nav">
+            <button class="panel-back-btn">&#8592;</button>
+            <span class="panel-title">Settings</span>
+          </div>
+          <div class="panel-body">
+            <p class="panel-h1">Settings</p>
+
+            <div class="settings-group">
+              <div class="settings-item">
+                <div class="settings-item-info">
+                  <span class="settings-item-label">Dark Mode</span>
+                  <span class="settings-item-desc">Switch between light and dark theme</span>
+                </div>
+                <label class="settings-toggle">
+                  <input type="checkbox" id="settingDarkMode" checked>
+                  <span class="settings-toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-item">
+                <div class="settings-item-info">
+                  <span class="settings-item-label">Notifications</span>
+                  <span class="settings-item-desc">Show welcome notification on unlock</span>
+                </div>
+                <label class="settings-toggle">
+                  <input type="checkbox" id="settingNotifs" checked>
+                  <span class="settings-toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-item">
+                <div class="settings-item-info">
+                  <span class="settings-item-label">Particle Background</span>
+                  <span class="settings-item-desc">Animated network on home screen</span>
+                </div>
+                <label class="settings-toggle">
+                  <input type="checkbox" id="settingParticles" checked>
+                  <span class="settings-toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-group">
+              <p class="panel-label">Wallpaper</p>
+              <div class="settings-wallpaper-grid">
+                <div class="settings-wallpaper" data-wallpaper="default">
+                  <div style="background:linear-gradient(155deg,#1e2d29,#0f1715);border-radius:8px;"></div>
+                  <span>Default</span>
+                </div>
+                <div class="settings-wallpaper" data-wallpaper="purple">
+                  <div style="background:linear-gradient(155deg,#2d1e3e,#150f20);border-radius:8px;"></div>
+                  <span>Purple</span>
+                </div>
+                <div class="settings-wallpaper" data-wallpaper="ocean">
+                  <div style="background:linear-gradient(155deg,#1a2a3e,#0d1520);border-radius:8px;"></div>
+                  <span>Ocean</span>
+                </div>
+                <div class="settings-wallpaper" data-wallpaper="ember">
+                  <div style="background:linear-gradient(155deg,#3e1a1a,#200d0d);border-radius:8px;"></div>
+                  <span>Ember</span>
+                </div>
+                <div class="settings-wallpaper active" data-wallpaper="black">
+                  <div style="background:#000000;border-radius:8px;"></div>
+                  <span>Black</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-group">
+              <p class="panel-label">About</p>
+              <div class="settings-item" style="border:none;">
+                <div class="settings-item-info">
+                  <span class="settings-item-label">Portfolio v1.0</span>
+                  <span class="settings-item-desc">Built with HTML, CSS & JS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end tablet-screen -->
+
+      <!-- Home bar -->
+      <div class="tablet-home-bar"></div>
+
+      <!-- Hover prompt -->
+      <div class="hover-prompt">tap to open</div>
+
+    </div><!-- end tablet -->
+
+  </div><!-- end scene -->
+
+  <!-- Corner halftone patterns -->
+  <div class="halftone halftone-tr"></div>
+  <div class="halftone halftone-bl"></div>
+
+  <!-- Floating greetings (opposite corners) -->
+  <div class="greeting greeting-tl" id="greetingTR"></div>
+  <div class="greeting greeting-br" id="greetingBL"></div>
+
+  <!-- Close button -->
+  <button class="close-btn" id="closeBtn" aria-label="Close Portfolio">Close</button>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
