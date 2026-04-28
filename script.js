@@ -112,6 +112,18 @@ screenLock.addEventListener('pointerup', (e) => {
   lockDragY = 0;
 });
 
+const isPointerDevice = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+if (isPointerDevice) {
+  document.querySelector('.lock-swipe-text').textContent = 'Click to unlock';
+  screenLock.addEventListener('click', () => {
+    if (state !== 'locked') return;
+    screenLock.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
+    screenLock.style.transform = 'translateY(-100%)';
+    screenLock.style.opacity = '0';
+    unlockToHome();
+  });
+}
+
 function unlockToHome() {
   hasUnlocked = true;
   state = 'home';

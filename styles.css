@@ -1075,20 +1075,22 @@ body {
 
 .panel-h1 {
   font-family: 'Playfair Display', serif;
-  font-size: 26px; font-weight: 700;
+  font-size: 28px; font-weight: 700;
   color: #e8ecea; letter-spacing: -0.03em;
   margin-bottom: 6px;
+  text-align: center;
 }
 
 .panel-h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 17px; color: #8b5cf6;
+  font-size: 19px; color: #8b5cf6;
   letter-spacing: -0.02em; margin-bottom: 14px;
   font-style: italic;
+  text-align: center;
 }
 
 .panel-p {
-  font-size: 15px; line-height: 1.7;
+  font-size: 16px; line-height: 1.7;
   color: rgba(232,236,234,0.68);
   margin-bottom: 14px;
 }
@@ -1108,6 +1110,14 @@ body {
   border-radius: 14px; padding: 16px;
   margin-bottom: 12px; cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.project-card-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .project-card:hover {
@@ -1115,9 +1125,20 @@ body {
   border-color: rgba(139,92,246,0.2);
 }
 
-.project-card-title { font-family: 'Playfair Display', serif; font-size: 17px; color: #e8ecea; margin-bottom: 4px; }
+.project-card-title { font-family: 'Playfair Display', serif; font-size: 18px; color: #e8ecea; margin-bottom: 4px; }
 .project-card-meta  { font-size: 12px; color: #8b5cf6; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
-.project-card-desc  { font-size: 14px; color: rgba(232,236,234,0.58); line-height: 1.6; }
+.project-card-desc  { font-size: 15px; color: rgba(232,236,234,0.58); line-height: 1.6; }
+
+.project-card-preview {
+  width: 180px;
+  align-self: stretch;
+  flex-shrink: 0;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.08);
+}
 
 .skill-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
 
@@ -1159,7 +1180,7 @@ body {
 
 .contact-icon svg { width: 20px; height: 20px; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .contact-label { font-size: 12px; color: rgba(232,236,234,0.45); text-transform: uppercase; letter-spacing: 0.05em; }
-.contact-value { font-size: 15px; color: #e8ecea; font-weight: 500; }
+.contact-value { font-size: 16px; color: #e8ecea; font-weight: 500; }
 
 /* Contact Form */
 .contact-form {
@@ -1213,8 +1234,8 @@ body {
 }
 
 .timeline-item:last-child::after { display: none; }
-.timeline-role    { font-size: 16px; font-weight: 600; color: #e8ecea; margin-bottom: 2px; }
-.timeline-company { font-size: 14px; color: #8b5cf6; margin-bottom: 3px; }
+.timeline-role    { font-size: 17px; font-weight: 600; color: #e8ecea; margin-bottom: 2px; }
+.timeline-company { font-size: 15px; color: #8b5cf6; margin-bottom: 3px; }
 .timeline-period  { font-size: 12px; color: rgba(232,236,234,0.4); letter-spacing: 0.03em; }
 
 .lab-card {
@@ -1649,7 +1670,7 @@ body {
 
   .dock { gap: 16px; }
 
-  .panel-h1 { font-size: 22px; }
+  .panel-h1 { font-size: 24px; }
   .panel-p  { font-size: 14px; }
 
   .room-prompt { top: 10%; }
@@ -1663,17 +1684,50 @@ body {
   }
 
   .tablet.idle {
-    transform: rotateX(54deg) rotateZ(-16deg) scale(0.60);
+    transform: rotateX(54deg) rotateZ(-16deg) scale(0.68);
   }
 
   .tablet.idle:hover {
-    transform: rotateX(51deg) rotateZ(-15deg) scale(0.62);
+    transform: rotateX(51deg) rotateZ(-15deg) scale(0.70);
   }
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1025px) and (max-width: 1399px) {
+  .tablet.idle {
+    transform: rotateX(54deg) rotateZ(-16deg) scale(0.63);
+  }
+
+  .tablet.idle:hover {
+    transform: rotateX(51deg) rotateZ(-15deg) scale(0.65);
+  }
+}
+
+@media (min-width: 1400px) and (max-width: 1919px) {
   .tablet {
-    width: min(1100px, 96vw);
-    height: min(780px, 94vh);
+    width: min(1200px, 94vw);
+    height: min(850px, 94vh);
+  }
+
+  .tablet.idle {
+    transform: rotateX(54deg) rotateZ(-16deg) scale(0.65);
+  }
+
+  .tablet.idle:hover {
+    transform: rotateX(51deg) rotateZ(-15deg) scale(0.67);
+  }
+}
+
+@media (min-width: 1920px) {
+  .tablet {
+    width: min(1400px, 92vw);
+    height: min(980px, 94vh);
+  }
+
+  .tablet.idle {
+    transform: rotateX(54deg) rotateZ(-16deg) scale(0.68);
+  }
+
+  .tablet.idle:hover {
+    transform: rotateX(51deg) rotateZ(-15deg) scale(0.70);
   }
 }
